@@ -1,0 +1,2 @@
+The exgrex package provides the ability to create a test run of various configurations.
+Used for external graders as an entry point to the dock container.
