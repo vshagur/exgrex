@@ -1,11 +1,12 @@
-DEFAULT_CONFIG = {
-    'grader_filename': 'grader.py',
-    'cwd': '/grader',
-    'cli_parameter_part_id': 'partId',
-    'env_parameter_debug': 'EXGREX_DEBUG',
-    'positive_report': 'All tests passed!',
-    'solution_filename': 'solution.py',
-    'submission_path': '/shared/submission',
-    'submission_path_debug': 'shared/submission',
-    'tests_path': 'tests/',
-}
+class DefaultConfig:
+    """Класс хранения пользовательских настроек."""
+    cli_parameter_part_id = 'partId'
+    cwd = '/grader'
+    env_parameter_debug = 'EXGREX_DEBUG'
+    executor_filename = 'executor.py'
+    positive_report = 'All tests passed!'
+    submission_path = '/shared/submission'
+    submission_path_debug = 'shared/submission'
+    solution_filename = 'solution.py'
+    submission_type = '.py'
+    tests_path = 'tests/'

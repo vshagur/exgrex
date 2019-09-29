@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import sys
+import os
 import json
-from exgrex.core import execute_grader
-from exgrex.default_config import DEFAULT_CONFIG
+from exgrex.core import Grader, load_execute_module
+from exgrex.default_config import DefaultConfig
 
 
 def parse(required_setting_name):
@@ -19,13 +20,13 @@ def send_report(feedback, score):
     sys.exit(0)
 
 
-def main():
-    required_setting_name = DEFAULT_CONFIG['cli_parameter_part_id']
+def main(config=DefaultConfig):
     try:
-        # распарсим cli, получим параметры
-        parameters = parse(required_setting_name)
-        # вызовем исполнитель с параметрами
-        feedback, score = execute_grader(parameters)
+        cli_parameters = parse(config.cli_parameter_part_id)
+        debug = os.environ().get(config.env_parameter_debug, True)
+        grader = Grader.create_grader(cli_parameters, debug, config)
+        executor = load_execute_module(grader.grader_path, config.executor_filename)
+        feedback, score = executor.execute_grader(grader)
     except Exception as err:
         feedback = 'Grader Error.\n' + str(err)
         score = 0
