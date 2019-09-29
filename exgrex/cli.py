@@ -23,6 +23,7 @@ def send_report(feedback, score):
 
 
 def load_executor_module(module_name, module_path):
+    """загружает модуль executor, определенный пользователем"""
     spec = importlib.util.spec_from_file_location(module_name, module_path)
     executor = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(executor)
@@ -41,27 +42,11 @@ def main(config=DefaultConfig):
         feedback, score = executor.execute_grader(grader)
     except Exception as err:
         tb = sys.exc_info()[2]
-        feedback = 'Grader Error.\n' + str(err.with_traceback(tb)) # todo доделать вывод
+        feedback = 'Grader Error.\n' + str(err.with_traceback(tb))  # todo доделать вывод
         score = 0
 
     # отправим отчет
     send_report(feedback, score)
-
-
-# def main(config=DefaultConfig):
-# try:
-#     cli_parameters = parse(config.cli_parameter_part_id)
-#     debug = os.environ.get(config.env_parameter_debug, True)
-#     grader = Grader.create_grader(cli_parameters, debug, config)
-#     module_path = os.path.join(grader.cwd, grader.grader_path)
-#     executor = load_execute_module(module_path, config.executor_filename)
-#     feedback, score = executor.execute_grader(grader)
-# except Exception as err:
-#     feedback = 'Grader Error.\n' + str(err)
-#     score = 0
-#
-# # отправим отчет
-# send_report(feedback, score)
 
 
 if __name__ == "__main__":

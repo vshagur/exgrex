@@ -15,20 +15,21 @@ def check_solution_file_exist(ignore_list=None):
     Список таких файлов может быть передан в параметре ignore_list.
     """
 
+    ignore_list = ignore_list or []
+
     def decorator(func):
         def wrapper(grader):
-            ignore_list = ignore_list or []
 
-            file_names = [filename for filename in os.listdir(grader.submission_path) if
-                          filename not in ignore_list]
+            paths = [path for path in grader.submission_path.iterdir()
+                     if path.is_file and path.name not in ignore_list]
 
-            if not file_names:
+            if not paths:
                 raise GraderIOError('Solution file not found.')
 
-            if len(file_names) != 1:
+            if len(paths) != 1:
                 raise GraderIOError('Found several solution files.')
 
-            grader.submission_filename = file_names.pop()
+            grader.submission_filename = paths.pop().name
 
             return func(grader)
 
@@ -136,6 +137,7 @@ def format_test_result():
     Обработка результатов тестирования. Установка значений grader.feedback и
     grader.score
     """
+
     def decorator(func):
         def wrapper(grader):
             # === ошибок нет и все тесты пройдены ===
@@ -181,5 +183,3 @@ def format_test_result():
         return wrapper
 
     return decorator
-
-
