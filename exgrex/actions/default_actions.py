@@ -15,11 +15,10 @@ def check_solution_file_exist(ignore_list=None):
     Список таких файлов может быть передан в параметре ignore_list.
     """
 
-    ignore_list = ignore_list or []
-
     def decorator(func):
         def wrapper(grader):
-
+            nonlocal ignore_list
+            ignore_list = ignore_list or []
             paths = [path for path in grader.submission_path.iterdir()
                      if path.is_file and path.name not in ignore_list]
 
@@ -63,11 +62,19 @@ def copy_solution_file(path_to=None):
 
     def decorator(func):
         def wrapper(grader):
-            path_to = path_to or grader.tests_path
-            source = os.path.join(grader.cwd, grader.submission_path,
-                                  grader.submission_filename)
-            destination = os.path.join(grader.cwd, grader.grader_path,
-                                       grader.tests_path, grader.solution_filename)
+            nonlocal path_to
+
+            if path_to is None:
+                path_to = grader.tests_path
+            else:
+                path_to = Path(grader.grader_path, path_to)
+
+            if not path_to.exists():
+                path_to.mkdir()
+
+            source = Path(grader.submission_path, grader.submission_filename)
+            destination = Path(path_to, grader.solution_filename)
+
             shutil.copyfile(source, destination)
             grader.solution_path = path_to
             return func(grader)
@@ -85,6 +92,7 @@ def add_solution_as_module(module_name=None):
 
     def decorator(func):
         def wrapper(grader):
+            nonlocal module_name
             # todo обработать ошибки импорта решения как модуля
             module_name = module_name or Path(grader.solution_filename).stem
             module_path = Path(grader.cwd, grader.grader_path, grader.solution_filename)
