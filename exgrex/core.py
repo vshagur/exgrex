@@ -1,27 +1,26 @@
 import os
-from importlib import import_module
 from pathlib import Path
+from exgrex.exgrex_exceptions import GraderIOError
 
 
 class Grader:
     def __init__(
             self, cwd, grader_path, tests_path, submission_path, solution_filename,
-            submission_type, submission_filename=None, score=0, grader_is_failed=False,
+            submission_type=None, submission_filename=None, score=0, grader_is_failed=False,
             tests_result=None, tests_log=None, failfast=True, traceback=False,
-            feedback='', debug=True, solution_path=None, count_tests=None
+            feedback='',  solution_path=None, count_tests=None, debug=True
     ):
         # общие параметры
         self.cwd = cwd  # рабочая директория
         self.grader_path = grader_path  # директория грейдера
+        self.tests_path = tests_path  # директория с тестами
+        self.solution_path = solution_path
+        self.solution_filename = solution_filename  # имя файла с решением для тестов
 
         # параметры передачи файла с решением
         self.submission_path = submission_path  # директория с решением
         self.submission_filename = submission_filename  # имя файла с решением
         self.submission_type = submission_type  #
-
-        self.tests_path = tests_path  # директория с тестами
-        self.solution_filename = solution_filename  # имя файла с решением для тестов
-        self.solution_path = solution_path
 
         # параметры выполнения
         self.feedback = feedback  # сообщение о результатах проверки
@@ -37,23 +36,23 @@ class Grader:
     @classmethod
     def create_grader(cls, cli_parameters, debug, config):
         if debug:
-            cwd = os.path.abspath(os.curdir)
-            submission_path = config.submission_path_debug
+            cwd = Path.cwd()
+            submission_path = Path(cwd, config.submission_path_debug)
         else:
-            cwd = config.cwd
-            submission_path = config.submission
+            cwd = Path(config.cwd)
+            submission_path = Path(config.submission)
 
-        grader_path = cli_parameters[config.cli_parameter_part_id]
-        tests_path = config.tests_path
+        grader_path = Path(cwd, cli_parameters[config.cli_parameter_part_id])
+
+        if not grader_path.exists():
+            raise GraderIOError(f'Grader with id: {str(grader_path)} not found.')
+
+        tests_path = Path(grader_path, config.tests_path)
         solution_filename = config.solution_filename
-        submission_type = config.submission_type
+
         return Grader(cwd, grader_path, tests_path, submission_path, solution_filename,
-                      submission_type)
+                       debug)
 
 
-def load_execute_module(grader_path, module_filename):
-    module_name = '.'.join((grader_path, Path(module_filename).stem))
-    return import_module(module_name)
 
-# def execute_grader(grader):
-#     return grader.score, grader.feedback
+
