@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys
 import os
 import json
@@ -23,7 +23,7 @@ def send_report(feedback, score):
 def main(config=DefaultConfig):
     try:
         cli_parameters = parse(config.cli_parameter_part_id)
-        debug = os.environ().get(config.env_parameter_debug, True)
+        debug = os.environ.get(config.env_parameter_debug, True)
         grader = Grader.create_grader(cli_parameters, debug, config)
         executor = load_execute_module(grader.grader_path, config.executor_filename)
         feedback, score = executor.execute_grader(grader)

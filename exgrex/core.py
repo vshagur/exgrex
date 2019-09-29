@@ -1,5 +1,4 @@
 import os
-# from exgrex.default_config import DefaultConfig as config
 from importlib import import_module
 from pathlib import Path
 
