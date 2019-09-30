@@ -54,7 +54,7 @@ def check_solution_file_name(solution_filename):
     return decorator
 
 
-def copy_solution_file(path_to=None):
+def copy_solution_file(path_to=None): # todo добавить в парамеры имя файла
     """
     Копирует файл с решением в директорию path_to, по-умочанию берется значение
     из grader.tests_path. Устанавливает значение grader.solution_path.
@@ -112,14 +112,18 @@ def run_tests(failfast=None, traceback=None):
 
     def decorator(func):
         def wrapper(grader):
+            nonlocal failfast
+            nonlocal traceback
+            grader.failfast = failfast or grader.failfast
+            grader.traceback = traceback or grader.traceback
             # создание набора тестов, загрузчика
             suite = unittest.TestSuite()
             loader = unittest.TestLoader()
             # создание объекта result и установка настроек (останавливать тесты на
             # первом падении?, выводить traceback?)
             result = unittest.TestResult()
-            result.failfast = failfast or grader.failfast
-            result.tb_locals = traceback or grader.traceback
+            result.failfast = grader.failfast
+            result.tb_locals = grader.traceback
             # поиск тестов в директории и добавление их в набор
             tests = loader.discover(grader.tests_path)
             # todo проверить на ошибки loader.error, нужно на время отладки тестов
