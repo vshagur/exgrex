@@ -19,7 +19,7 @@ setup(name='exgrex',
       packages=find_packages(exclude=['tests', '*.test.*', '*.test']),
       scripts=['bin/executeGrader', ],
       keywords=['mooc', 'grader', 'python', 'python3'],
-      # url='https://github.com/vshagur',
+      url='https://github.com/vshagur',
       # downloadurl='https://github.com/vshagur',
 
       )
