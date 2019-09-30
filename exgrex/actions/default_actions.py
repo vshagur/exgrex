@@ -54,7 +54,7 @@ def check_solution_file_name(solution_filename):
     return decorator
 
 
-def copy_solution_file(path_to=None): # todo добавить в парамеры имя файла
+def copy_solution_file(path_to=None):  # todo добавить в парамеры имя файла
     """
     Копирует файл с решением в директорию path_to, по-умочанию берется значение
     из grader.tests_path. Устанавливает значение grader.solution_path.

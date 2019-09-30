@@ -14,7 +14,7 @@ class Grader:
         self.cwd = cwd  # рабочая директория
         self.grader_path = grader_path  # директория грейдера
         self.tests_path = tests_path  # директория с тестами
-        self.solution_path = solution_path
+        self.solution_path = solution_path # директория назначения при копировании файла решения
         self.solution_filename = solution_filename  # имя файла с решением для тестов
 
         # параметры передачи файла с решением

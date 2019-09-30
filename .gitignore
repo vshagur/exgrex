@@ -1,7 +1,9 @@
 #######################################################################
 ##  https://github.com/github/gitignore/blob/master/Python.gitignore  #
 #######################################################################
-#
+# Project
+.example_grader
+.example_grader/*
 # IDE
 .idea
 .idea/*
