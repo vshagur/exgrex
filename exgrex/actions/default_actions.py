@@ -95,9 +95,10 @@ def add_solution_as_module(module_name=None):
             nonlocal module_name
             # todo обработать ошибки импорта решения как модуля
             module_name = module_name or Path(grader.solution_filename).stem
-            module_path = Path(grader.cwd, grader.grader_path, grader.solution_filename)
+            module_path = Path(grader.solution_path, grader.solution_filename)
             spec = importlib.util.spec_from_file_location(module_name, module_path)
             module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
             sys.modules[spec.name] = module
             return func(grader)
 
@@ -120,8 +121,7 @@ def run_tests(failfast=None, traceback=None):
             result.failfast = failfast or grader.failfast
             result.tb_locals = traceback or grader.traceback
             # поиск тестов в директории и добавление их в набор
-            tests_path = os.path.join(grader.cwd, grader.grader_path, grader.tests_path)
-            tests = loader.discover(tests_path)
+            tests = loader.discover(grader.tests_path)
             # todo проверить на ошибки loader.error, нужно на время отладки тестов
             # проверить, что загрузчик тестов не будет ловить тесты из решения студента
             suite.addTests(tests)
