@@ -1,4 +1,9 @@
+![](https://img.shields.io/static/v1?label=Python&message=3.6&color=blue)
+![](https://img.shields.io/static/v1?label=OS&message=linux&color=blue)
+![](https://img.shields.io/static/v1?label=Dependencies&message=Pytest&color=green)
+
 # Exgrex
+
 The exgrex package provides the ability to create a test run of various configurations. Used for external graders as an entry point to the dock container.
 
 ## Getting Started
