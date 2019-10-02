@@ -38,6 +38,7 @@ def main(config=DefaultConfig):
         grader = Grader.create_grader(cli_parameters, debug, config)
         module_path = os.path.join(
             grader.cwd, grader.grader_path, config.executor_filename)
+        # todo сделать загрузку по умолчанию для случая, когда файл executor.py не найден
         module_name = Path(config.executor_filename).stem
         executor = load_executor_module(module_name, module_path)
         feedback, score = executor.execute_grader(grader)

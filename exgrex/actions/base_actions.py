@@ -1,5 +1,4 @@
 import importlib.util
-import os.path
 import shutil
 import sys
 import unittest
@@ -45,6 +44,7 @@ def check_solution_file_name(solution_filename):
 
     def decorator(func):
         def wrapper(grader):
+            nonlocal solution_filename
             if solution_filename != grader.submission_filename:
                 raise GraderIOError(f'The solution file: {solution_filename} not found.')
             return func(grader)
@@ -183,6 +183,7 @@ def format_test_result():
                 short_description = test_case_obj.shortDescription()
                 # сбрасываем значение traceback, если вывод его не нужен
                 traceback = traceback if grader.traceback else ' '
+                # todo вынести шаблоны сообщений в настройки
                 result += f'FAILED: {test_name}.\nDescription: {short_description}\n{traceback}\n'
                 # завершаем вывод сообщений, если требуется вывод только первого упавшего теста
                 if grader.failfast:
