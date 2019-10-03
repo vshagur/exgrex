@@ -1,4 +1,6 @@
 from pathlib import Path
+import zipfile
+from exgrex.exgrex_exceptions import GraderIOError
 
 
 def rename_solution_file(new_filename):
@@ -78,6 +80,10 @@ def check_zip():
 
     def decorator(func):
         def wrapper(grader):
+            if not zipfile.is_zipfile(
+                    Path(grader.submission_path, grader.submission_filename)):
+                raise GraderIOError('GraderIOError. Submission should be zip archive')
+
             return func(grader)
 
         return wrapper
