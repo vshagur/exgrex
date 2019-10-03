@@ -3,11 +3,12 @@ import exgrex.actions.extend_actions as extend_actions
 
 
 @actions.check_solution_file_exist()
+# for zip
 @extend_actions.check_zip()
-@extend_actions.check_files_into_zip(['submission/solution.py','gg'])
-@actions.copy_solution_file()
-# @extend_actions.glue_code(file_before_path='code_before.txt',
-#                           file_after_path='code_after.txt')
+@extend_actions.check_files_into_zip(['submission/solution.py'])
+@extend_actions.extract_files_from_zip({'submission/solution.py':'tests'})
+# for file
+# @actions.copy_solution_file()
 @actions.run_tests(failfast=False, traceback=False)
 @actions.format_test_result()
 def execute_grader(grader):
