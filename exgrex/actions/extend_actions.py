@@ -1,3 +1,6 @@
+from pathlib import Path
+
+
 def rename_solution_file(new_filename):
     """
     rename_solution_file
@@ -30,15 +33,36 @@ def configure_grader(new_parameters):
     return decorator
 
 
-def glue_code(file_before=None, file_after=None):
+def glue_code(file_before_path=None, file_after_path=None, path_to=None):
+    # todo добавить в параметр - имя файла
     """
-    glue_code
+    glue_code, указанный в path_to путь должен существовать, путь указывается
+    относительно директории грейдера. file_before_path - путь до файла, включая имя файла
     """
 
     def decorator(func):
         def wrapper(grader):
-            nonlocal file_before
-            nonlocal file_after
+            nonlocal file_before_path
+            nonlocal file_after_path
+            nonlocal path_to
+            file_paths = []
+
+            if not file_before_path is None:
+                file_paths.append(Path(grader.grader_path, Path(file_before_path)))
+
+            file_paths.append(Path(grader.submission_path, grader.submission_filename))
+
+            if not file_after_path is None:
+                file_paths.append(Path(grader.grader_path, Path(file_after_path)))
+
+            if path_to is None:
+                path_to = grader.tests_path
+            else:
+                path_to = Path(grader.grader_path, path_to)
+
+            destination_path = Path(path_to, grader.solution_filename)
+            text = '\n\n'.join(path.read_text() for path in file_paths)
+            destination_path.write_text(text)
 
             return func(grader)
 
