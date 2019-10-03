@@ -7,7 +7,7 @@ class Grader:
             self, cwd, grader_path, tests_path, submission_path, solution_filename,
             submission_type=None, submission_filename=None, score=0,
             grader_is_failed=False,
-            tests_result=None, tests_log=None, failfast=True, traceback=False,
+            tests_result=None, tests_logfile_path=None, failfast=True, traceback=False,
             feedback='', solution_path=None, count_tests=None, debug=True
     ):
         # общие параметры
@@ -27,7 +27,7 @@ class Grader:
         self.score = score  # оценка по результатам проверки
         self.grader_is_failed = grader_is_failed  # флаг о непрохождении проверки
         self.tests_result = tests_result  # сырые результаты тестов
-        self.tests_log = tests_log  # имя лог файла с результатами тестов
+        self.tests_logfile_path = tests_logfile_path  # имя лог файла с результатами тестов
         self.failfast = failfast  # флаг остановки проверок на первом падении
         self.traceback = traceback  # флаг вывода traceback
         self.debug = debug  # флаг режима отладки

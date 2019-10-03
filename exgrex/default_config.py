@@ -8,3 +8,4 @@ class DefaultConfig:
     submission_path_debug = 'shared/submission'
     solution_filename = 'solution.py'
     tests_path = 'tests/'
+    pytest_command_template='pytest --tb=line --junitxml={} {}'
