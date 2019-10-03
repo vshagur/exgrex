@@ -3,38 +3,6 @@ import zipfile
 from exgrex.exgrex_exceptions import GraderIOError
 
 
-def rename_solution_file(new_filename):
-    """
-    rename_solution_file
-    """
-
-    def decorator(func):
-        def wrapper(grader):
-            nonlocal new_filename
-
-            return func(grader)
-
-        return wrapper
-
-    return decorator
-
-
-def configure_grader(new_parameters):
-    """
-    configure_grader
-    """
-
-    def decorator(func):
-        def wrapper(grader):
-            nonlocal new_parameters
-
-            return func(grader)
-
-        return wrapper
-
-    return decorator
-
-
 def glue_code(file_before_path=None, file_after_path=None, path_to=None):
     # todo добавить в параметр - имя файла
     """
@@ -93,12 +61,27 @@ def check_zip():
 
 def check_files_into_zip(filenames_list):
     """
-    check_files_into_zip
+    check_files_into_zip, проверяет наличие необходимых файлов в архиве решения, если
+    архив содержит вложенные структуры, необходимо указывать путь + имя файла
     """
 
     def decorator(func):
         def wrapper(grader):
             nonlocal filenames_list
+            zip_path = Path(grader.submission_path, grader.submission_filename)
+
+            try:
+                archive = zipfile.ZipFile(zip_path, 'r')
+            except Exception as err:
+                message = f'GraderIOError. An error occurred while processing the ' \
+                          f'archive with the solution. Error - {err.__class__.__name__}'
+                raise GraderIOError(message)
+
+            for file_name in filenames_list:
+                if file_name not in archive.namelist():
+                    message = f'GraderIOError. The solution archive should contain ' \
+                              f'the file: {file_name}.'
+                    raise GraderIOError(message)
 
             return func(grader)
 
@@ -142,6 +125,54 @@ def extract_all_from_zip(path_to=None):
 def delete_files(filenames_list):
     """
     delete
+    """
+
+    def decorator(func):
+        def wrapper(grader):
+            nonlocal filenames_list
+
+            return func(grader)
+
+        return wrapper
+
+    return decorator
+
+
+def rename_solution_file(new_filename):
+    """
+    rename_solution_file
+    """
+
+    def decorator(func):
+        def wrapper(grader):
+            nonlocal new_filename
+
+            return func(grader)
+
+        return wrapper
+
+    return decorator
+
+
+def configure_grader(new_parameters):
+    """
+    configure_grader
+    """
+
+    def decorator(func):
+        def wrapper(grader):
+            nonlocal new_parameters
+
+            return func(grader)
+
+        return wrapper
+
+    return decorator
+
+
+def clean(filenames_list):
+    """
+    clean, remove solution file in debug mode
     """
 
     def decorator(func):
