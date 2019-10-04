@@ -5,11 +5,9 @@ from exgrex.exgrex_exceptions import GraderIOError
 class Grader:
     def __init__(
             self, cwd, grader_path, tests_path, submission_path, solution_filename,
-            submission_type=None, submission_filename=None, score=0,
-            grader_is_failed=False, tests_result=None, tests_logfile_path=None,
-            failfast=True, traceback=False, feedback='', solution_path=None,
-            count_tests=None, debug=True
-    ):
+            score=0, grader_is_failed=False, failfast=True, debug=True, traceback=False,
+            feedback='', submission_filename=None, tests_result=None,
+            tests_logfile_path=None, solution_path=None, count_tests=None):
         # общие параметры
         self.cwd = cwd  # рабочая директория
         self.grader_path = grader_path  # директория грейдера
@@ -19,8 +17,8 @@ class Grader:
 
         # параметры передачи файла с решением
         self.submission_path = submission_path  # директория с решением
+        # assert submission_filename is None
         self.submission_filename = submission_filename  # имя файла с решением
-        self.submission_type = submission_type  #
 
         # параметры выполнения
         self.feedback = feedback  # сообщение о результатах проверки
