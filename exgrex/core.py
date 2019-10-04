@@ -6,15 +6,15 @@ class Grader:
     def __init__(
             self, cwd, grader_path, tests_path, submission_path, solution_filename,
             submission_type=None, submission_filename=None, score=0,
-            grader_is_failed=False,
-            tests_result=None, tests_logfile_path=None, failfast=True, traceback=False,
-            feedback='', solution_path=None, count_tests=None, debug=True
+            grader_is_failed=False, tests_result=None, tests_logfile_path=None,
+            failfast=True, traceback=False, feedback='', solution_path=None,
+            count_tests=None, debug=True
     ):
         # общие параметры
         self.cwd = cwd  # рабочая директория
         self.grader_path = grader_path  # директория грейдера
         self.tests_path = tests_path  # директория с тестами
-        self.solution_path = solution_path # директория назначения при копировании файла решения
+        self.solution_path = solution_path  # директория назначения при копировании файла решения
         self.solution_filename = solution_filename  # имя файла с решением для тестов
 
         # параметры передачи файла с решением
