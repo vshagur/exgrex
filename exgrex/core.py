@@ -40,7 +40,7 @@ class Grader:
             submission_path = Path(cwd, config.submission_path_debug)
         else:
             cwd = Path(config.cwd)
-            submission_path = Path(config.submission)
+            submission_path = Path(config.submission_path)
 
         grader_path = Path(cwd, cli_parameters[config.cli_parameter_part_id])
 
