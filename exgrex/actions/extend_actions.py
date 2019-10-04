@@ -166,13 +166,15 @@ def delete_files(filenames_list):
 
 def rename_solution_file(new_filename):
     """
-    rename_solution_file
+    rename_solution_file, new_filename - новое имя файла с решением
     """
 
     def decorator(func):
         def wrapper(grader):
             nonlocal new_filename
-
+            new_filename_path = Path(grader.solution_path, new_filename)
+            Path(grader.solution_path, grader.solution_filename).rename(new_filename_path)
+            grader.solution_filename = new_filename
             return func(grader)
 
         return wrapper
