@@ -188,7 +188,8 @@ def configure_grader(new_parameters):
     def decorator(func):
         def wrapper(grader):
             nonlocal new_parameters
-
+            for parameter, value in new_parameters.items:
+                setattr(grader, parameter, value)
             return func(grader)
 
         return wrapper
@@ -196,17 +197,4 @@ def configure_grader(new_parameters):
     return decorator
 
 
-def clean(filenames_list):
-    """
-    clean, remove solution file in debug mode
-    """
 
-    def decorator(func):
-        def wrapper(grader):
-            nonlocal filenames_list
-
-            return func(grader)
-
-        return wrapper
-
-    return decorator
