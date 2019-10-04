@@ -2,6 +2,7 @@ import exgrex.core as core
 import pytest
 from pathlib import Path
 import os
+from exgrex.exgrex_exceptions import GraderIOError
 
 
 @pytest.fixture(scope='function')
@@ -179,3 +180,10 @@ def test_create_grader_from_create_grader_method_debug(tmp_path, config, cli_par
     assert grader.solution_path is None
     assert grader.count_tests is None
     assert grader.debug == True
+
+
+def test_creating_grader_throws_exception(config):
+    """создание объекта с помощью метода create_grader, выбрасывается исключение
+    GraderIOError, когда директории грейдера не существует"""
+    with pytest.raises(GraderIOError):
+        grader = core.Grader.create_grader({'partId': 'AAA'}, True, config)
