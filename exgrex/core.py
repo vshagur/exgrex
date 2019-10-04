@@ -48,5 +48,5 @@ class Grader:
         tests_path = Path(grader_path, config.tests_path)
         solution_filename = config.solution_filename
 
-        return Grader(cwd, grader_path, tests_path, submission_path, solution_filename,
-                      debug)
+        return Grader(
+            cwd, grader_path, tests_path, submission_path, solution_filename, debug=debug)

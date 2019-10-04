@@ -1,9 +1,10 @@
 import exgrex.core as core
 import pytest
 from pathlib import Path
+import os
 
 
-@pytest.fixture()
+@pytest.fixture(scope='function')
 def config():
     class DefaultConfig:
         cli_parameter_part_id = 'partId'
@@ -73,8 +74,8 @@ def test_create_grader(config):
 
     grader = core.Grader(
         cwd, grader_path, tests_path, submission_path, solution_filename,
-        submission_filename=submission_filename,
-        score=score, grader_is_failed=grader_is_failed, tests_result=tests_result,
+        submission_filename=submission_filename, score=score,
+        grader_is_failed=grader_is_failed, tests_result=tests_result,
         tests_logfile_path=tests_logfile_path, failfast=failfast, traceback=traceback,
         feedback=feedback, solution_path=solution_path, count_tests=count_tests,
         debug=debug)
@@ -127,6 +128,44 @@ def test_create_grader_from_create_grader_method(tmp_path, config, cli_parameter
     assert grader.grader_path == grader_path
     assert grader.tests_path == Path(grader_path, config.tests_path)
     assert grader.submission_path == Path(config.submission_path)
+    assert grader.solution_filename == config.solution_filename
+    # check type default params
+    assert grader.submission_filename is None
+    assert grader.score == 0
+    assert grader.grader_is_failed == False
+    assert grader.tests_result is None
+    assert grader.tests_logfile_path is None
+    assert grader.failfast == True
+    assert grader.traceback == False
+    assert grader.feedback == ''
+    assert grader.solution_path is None
+    assert grader.count_tests is None
+    assert grader.debug == False
+
+
+@pytest.mark.parametrize(
+    'cli_parameters', [
+        {'partId': 'AAA'},
+        {'partId': 'BBB'},
+    ])
+def test_create_grader_from_create_grader_method_debug(tmp_path, config, cli_parameters):
+    os.chdir(tmp_path)
+    config.cwd = tmp_path
+    grader_path = Path(tmp_path, cli_parameters.get(config.cli_parameter_part_id))
+    grader_path.mkdir()
+    debug = True
+    grader = core.Grader.create_grader(cli_parameters, debug, config)
+    # check type params
+    assert isinstance(grader.cwd, Path)
+    assert isinstance(grader.grader_path, Path)
+    assert isinstance(grader.tests_path, Path)
+    assert isinstance(grader.submission_path, Path)
+    assert isinstance(grader.solution_filename, str)
+    # check value params
+    assert grader.cwd == Path(config.cwd)
+    assert grader.grader_path == grader_path
+    assert grader.tests_path == Path(grader_path, config.tests_path)
+    assert grader.submission_path == Path(tmp_path, config.submission_path_debug)
     assert grader.solution_filename == config.solution_filename
     # check type default params
     assert grader.submission_filename is None
