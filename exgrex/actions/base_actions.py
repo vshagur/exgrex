@@ -74,7 +74,7 @@ def copy_solution_file(path_to=None):  # todo добавить в парамет
             source = Path(grader.submission_path, grader.submission_filename)
             destination = Path(path_to, grader.solution_filename)
 
-            shutil.copyfile(source, destination)
+            shutil.copyfile(source.absolute(), destination.absolute())
             grader.solution_path = path_to
             return func(grader)
 
@@ -126,7 +126,7 @@ def run_tests(failfast=None, traceback=None):
             # поиск тестов в директории и добавление их в набор
             tests = loader.discover(grader.tests_path)
             # todo проверить на ошибки loader.error, нужно на время отладки тестов
-            # проверить, что загрузчик тестов не будет ловить тесты из решения студента
+            # todo проверить, что загрузчик тестов не будет ловить тесты из решения студента
             suite.addTests(tests)
             # запуск тестов и установка значения grader.tests_result
             try:
