@@ -76,13 +76,17 @@ def test_copy_solution_file_default(create_structure, function):
            Path(submission_path, 'solution.py').read_text()
 
 
-# def test_copy_solution_file_with_parameter(create_structure, function):
-#     cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
-#     grader = Grader(*create_structure)
-#     function = base_actions.copy_solution_file()(function)
-#     function = base_actions.check_solution_file_exist('new_path')(function)
-#     function(grader)
-#     assert Path(grader_path,'new_path', solution_filename).exists()
+def test_copy_solution_file_with_parameter(create_structure, function):
+    cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
+    Path(grader_path, 'new_path').mkdir()
+    grader = Grader(*create_structure)
+    function = base_actions.copy_solution_file('new_path')(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    assert Path(grader_path, 'new_path', solution_filename).exists()
+    assert Path(grader.submission_path, grader.submission_filename).read_text() == \
+           Path(grader_path, 'new_path', solution_filename).read_text()
+
 
 def test_add_solution_as_module_default(create_structure, function):
     pass
