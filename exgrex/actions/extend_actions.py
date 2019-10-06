@@ -8,7 +8,9 @@ def glue_code(file_before_path=None, file_after_path=None, path_to=None):
     """
     glue_code, указанный в path_to путь должен существовать, путь указывается
     относительно директории грейдера. file_before_path - путь до файла, включая имя файла
-    """
+    Устанавливает значение grader.solution_path. Указанный
+    в path_to путь должен существовать, путь указывается относительно директории
+    грейдера. Содержимое файлов разделено в полученном файле двойным переводом строки"""
 
     def decorator(func):
         def wrapper(grader):
@@ -33,6 +35,7 @@ def glue_code(file_before_path=None, file_after_path=None, path_to=None):
             destination_path = Path(path_to, grader.solution_filename)
             text = '\n\n'.join(path.read_text() for path in file_paths)
             destination_path.write_text(text)
+            grader.solution_path = path_to
 
             return func(grader)
 
