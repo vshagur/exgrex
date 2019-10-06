@@ -3,6 +3,7 @@ from pathlib import Path
 from exgrex.exgrex_exceptions import GraderIOError
 from exgrex.core import Grader
 import pytest
+import sys
 
 
 # def test_fixture(create_structure):
@@ -74,6 +75,7 @@ def test_copy_solution_file_default(create_structure, function):
     assert Path(tests_path, solution_filename).exists()
     assert Path(tests_path, solution_filename).read_text() == \
            Path(submission_path, 'solution.py').read_text()
+    assert grader.solution_path == Path(tests_path)
 
 
 def test_copy_solution_file_with_parameter(create_structure, function):
@@ -86,14 +88,25 @@ def test_copy_solution_file_with_parameter(create_structure, function):
     assert Path(grader_path, 'new_path', solution_filename).exists()
     assert Path(grader.submission_path, grader.submission_filename).read_text() == \
            Path(grader_path, 'new_path', solution_filename).read_text()
+    assert grader.solution_path == Path(grader_path, 'new_path')
 
 
 def test_add_solution_as_module_default(create_structure, function):
-    pass
+    grader = Grader(*create_structure)
+    function = base_actions.add_solution_as_module()(function)
+    function = base_actions.copy_solution_file()(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    assert 'solution' in sys.modules
 
 
-def test_add_solution_as_module_with_parameter():
-    pass
+def test_add_solution_as_module_with_parameter(create_structure, function):
+    grader = Grader(*create_structure)
+    function = base_actions.add_solution_as_module('some_module_name')(function)
+    function = base_actions.copy_solution_file()(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    assert 'some_module_name' in sys.modules
 
 
 def test_run_tests_default(create_structure, function):
