@@ -8,10 +8,10 @@ import solution
 
 class TestSumma(unittest.TestCase):
     def test_summa(self):
-        self.assertEquals(solution.summa(3, 6), 9), 'add you comment here'
+        self.assertEqual(solution.summa(3, 6), 9), 'add you comment here'
 
     def test_summa_zero(self):
-        self.assertEquals(solution.summa(0, 0), 0)
+        self.assertEqual(solution.summa(0, 0), 0)
 """
 
 TEXT_SOLUTION_FILE = \

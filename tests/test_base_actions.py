@@ -6,17 +6,6 @@ import pytest
 import sys
 
 
-# def test_fixture(create_structure):
-#     cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
-#     assert grader_path.exists()
-#     assert tests_path.exists()
-#     assert submission_path.exists()
-#     assert Path(submission_path, solution_filename).exists()
-#     assert Path(submission_path, solution_filename).read_text() == 'def summa(x, y):\n    return x + y'
-#     assert Path(tests_path, 'test_solution.py').exists()
-#     assert Path(tests_path, 'test_solution.py').read_text() == 'return x + y'
-
-
 def test_check_solution_file_exist_raises_graderioerror_then_many_solution_files(
         create_structure, function):
     _, _, _, submission_path, _ = create_structure
@@ -109,13 +98,22 @@ def test_add_solution_as_module_with_parameter(create_structure, function):
     assert 'some_module_name' in sys.modules
 
 
-def test_run_tests_default(create_structure, function):
-    pass
+def test_run_tests_default_set_tests_result_and_count_tests(create_structure, function):
+    grader = Grader(*create_structure)
+    function = base_actions.run_tests()(function)
+    function = base_actions.add_solution_as_module('some_module_name')(function)
+    function = base_actions.copy_solution_file()(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    assert grader.count_tests == 2
+    assert grader.tests_result is not None
 
 
 def test_run_tests_with_parameter(create_structure, function):
+    # todo
     pass
 
 
 def test_format_test_result_set_feedback_and_score(create_structure, function):
+    # todo
     pass
