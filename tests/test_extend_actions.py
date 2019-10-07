@@ -8,13 +8,16 @@ import zipfile
 
 
 def test_glue_code_default(create_structure, function):
+    # test preparation
     cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
-    grader = Grader(*create_structure)
     Path(grader_path, 'before.py').write_text('#file before text')
     Path(grader_path, 'after.py').write_text('#file after text')
+    # create a grader object and apply function decorating
+    grader = Grader(*create_structure)
     function = extend_actions.glue_code()(function)
     function = base_actions.check_solution_file_exist()(function)
     function(grader)
+    # check
     assert Path(tests_path, solution_filename).exists()
     assert grader.solution_path == Path(tests_path)
     assert Path(tests_path, solution_filename).read_text() == \
@@ -47,11 +50,13 @@ def test_check_zip_raises_graderioerror_then_file_not_zip(create_structure, func
 
 def test_check_files_into_zip_raises_graderioerror_then_bad_zip(create_structure,
                                                                 function):
+    # todo
     pass
 
 
 def test_check_files_into_zip_raises_graderioerror_then_file_not_found(create_structure,
                                                                        function):
+    # todo вынести создание zip структуры в одтельную фикстуру
     cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
 
     with zipfile.ZipFile(Path(submission_path, 'solution.zip'), 'w') as file:
@@ -125,8 +130,18 @@ def test_extract_all_from_zip(create_structure, function):
 
 
 def test_rename_solution_file(create_structure, function):
+    # todo, подумать насколько необходима вообще эта функция (rename_solution_file)
     pass
 
 
-def configure_grader(create_structure, function):
-    pass
+def test_configure_grader(create_structure, function):
+    new_parameters = {'feedback': 'new_feedback',
+                      'debug': False,
+                      'count_tests': 100,
+                      'tests_path': Path('some_path')}
+    grader = Grader(*create_structure)
+    function = extend_actions.configure_grader(new_parameters)(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    for parameter, value in new_parameters.items():
+        assert getattr(grader, parameter) == value

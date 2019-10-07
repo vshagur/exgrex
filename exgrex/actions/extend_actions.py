@@ -187,7 +187,7 @@ def configure_grader(new_parameters):
     def decorator(func):
         def wrapper(grader):
             nonlocal new_parameters
-            for parameter, value in new_parameters.items:
+            for parameter, value in new_parameters.items():
                 setattr(grader, parameter, value)
             return func(grader)
 
