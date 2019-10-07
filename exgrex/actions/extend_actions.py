@@ -71,14 +71,8 @@ def check_files_into_zip(filenames_list):
     def decorator(func):
         def wrapper(grader):
             nonlocal filenames_list
-            zip_path = Path(grader.submission_path, grader.submission_filename)
-
-            try:
-                archive = zipfile.ZipFile(zip_path, 'r')
-            except Exception as err:
-                message = f'GraderIOError. An error occurred while processing the ' \
-                          f'archive with the solution. Error - {err.__class__.__name__}'
-                raise GraderIOError(message)
+            archive = zipfile.ZipFile(
+                Path(grader.submission_path, grader.submission_filename), 'r')
 
             for file_name in filenames_list:
                 if file_name not in archive.namelist():
@@ -200,6 +194,3 @@ def configure_grader(new_parameters):
         return wrapper
 
     return decorator
-
-
-

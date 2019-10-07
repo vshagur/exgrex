@@ -4,6 +4,7 @@ from pathlib import Path
 from exgrex.core import Grader
 import pytest
 from exgrex.exgrex_exceptions import GraderIOError
+import zipfile
 
 
 def test_glue_code_default(create_structure, function):
@@ -44,10 +45,6 @@ def test_check_zip_raises_graderioerror_then_file_not_zip(create_structure, func
         function(grader)
 
 
-def test_check_files_into_zip(create_structure, function):
-    pass
-
-
 def test_check_files_into_zip_raises_graderioerror_then_bad_zip(create_structure,
                                                                 function):
     pass
@@ -55,15 +52,76 @@ def test_check_files_into_zip_raises_graderioerror_then_bad_zip(create_structure
 
 def test_check_files_into_zip_raises_graderioerror_then_file_not_found(create_structure,
                                                                        function):
-    pass
+    cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
+
+    with zipfile.ZipFile(Path(submission_path, 'solution.zip'), 'w') as file:
+        file.writestr('solution.py', Path(submission_path, 'solution.py').read_text())
+
+    Path(submission_path, 'solution.py').unlink()
+    grader = Grader(*create_structure)
+    function = extend_actions.check_files_into_zip(['solution.py', 'other_file.txt'])(
+        function)
+    function = base_actions.check_solution_file_exist()(function)
+    with pytest.raises(GraderIOError):
+        function(grader)
 
 
 def test_extract_files_from_zip(create_structure, function):
-    pass
+    cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
+
+    with zipfile.ZipFile(Path(submission_path, 'solution.zip'), 'w') as file:
+        file.writestr('solution.py', 'print(100500)')
+        file.writestr('newtests/solution1.py', 'print(42)')
+
+    Path(submission_path, 'solution.py').unlink()
+    filenames = {'solution.py': 'tests/', 'newtests/solution1.py': 'tests/'}
+    grader = Grader(*create_structure)
+    function = extend_actions.extract_files_from_zip(filenames)(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    assert Path(tests_path, 'solution.py').exists()
+    assert Path(tests_path, 'newtests/solution1.py').exists()
+    assert Path(tests_path, 'solution.py').read_text() == 'print(100500)'
+    assert Path(tests_path, 'newtests/solution1.py').read_text() == 'print(42)'
+
+
+def test_extract_all_from_zip_default(create_structure, function):
+    cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
+
+    with zipfile.ZipFile(Path(submission_path, 'solution.zip'), 'w') as file:
+        file.writestr('solution.py', 'print(100500)')
+        file.writestr('newtests/solution1.py', 'print(42)')
+
+    Path(submission_path, 'solution.py').unlink()
+    grader = Grader(*create_structure)
+    function = extend_actions.extract_all_from_zip()(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    assert Path(tests_path, 'solution.py').exists()
+    assert Path(tests_path, 'newtests/solution1.py').exists()
+    assert Path(tests_path, 'solution.py').read_text() == 'print(100500)'
+    assert Path(tests_path, 'newtests/solution1.py').read_text() == 'print(42)'
 
 
 def test_extract_all_from_zip(create_structure, function):
-    pass
+    cwd, grader_path, tests_path, submission_path, solution_filename = create_structure
+
+    with zipfile.ZipFile(Path(submission_path, 'solution.zip'), 'w') as file:
+        file.writestr('solution.py', 'print(100500)')
+        file.writestr('newtests/solution1.py', 'print(42)')
+
+    Path(submission_path, 'solution.py').unlink()
+    grader = Grader(*create_structure)
+    path_to = Path(grader_path, 'tests/dir_name').mkdir()
+    function = extend_actions.extract_all_from_zip(path_to='tests/dir_name')(function)
+    function = base_actions.check_solution_file_exist()(function)
+    function(grader)
+    assert Path(grader_path, 'tests/dir_name', 'solution.py').exists()
+    assert Path(grader_path, 'tests/dir_name', 'newtests/solution1.py').exists()
+    assert Path(grader_path, 'tests/dir_name', 'solution.py').read_text() == \
+           'print(100500)'
+    assert Path(tests_path, 'dir_name', 'newtests/solution1.py').read_text() == \
+           'print(42)'
 
 
 def test_rename_solution_file(create_structure, function):
