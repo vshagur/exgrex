@@ -97,7 +97,6 @@ def add_solution_as_module(module_name=None):
     def decorator(func):
         def wrapper(grader):
             nonlocal module_name
-            # todo обработать ошибки импорта решения как модуля
             module_name = module_name or Path(grader.solution_filename).stem
             module_path = Path(grader.solution_path, grader.solution_filename)
             spec = importlib.util.spec_from_file_location(module_name, module_path)
