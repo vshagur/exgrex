@@ -54,22 +54,27 @@ def check_solution_file_name(solution_filename):
     return decorator
 
 
-def copy_solution_file(path_to=None):  # todo добавить в параметр - имя файла
+def copy_solution_file(path_to=None, filename=None):
     """
     Копирует файл с решением в директорию path_to, по-умочанию берется значение
     из grader.tests_path. Устанавливает значение grader.solution_path. Указанный
     в path_to путь должен существовать, путь указывается относительно директории
     грейдера.
+    :param filename:
     """
 
     def decorator(func):
         def wrapper(grader):
             nonlocal path_to
+            nonlocal filename
 
             if path_to is None:
                 path_to = grader.tests_path
             else:
                 path_to = Path(grader.grader_path, path_to)
+
+            if filename is not None:
+                grader.solution_filename = filename
 
             source = Path(grader.submission_path, grader.submission_filename)
             destination = Path(path_to, grader.solution_filename)

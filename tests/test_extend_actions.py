@@ -48,12 +48,6 @@ def test_check_zip_raises_graderioerror_then_file_not_zip(create_structure, func
         function(grader)
 
 
-def test_check_files_into_zip_raises_graderioerror_then_bad_zip(create_structure,
-                                                                function):
-    # todo
-    pass
-
-
 def test_check_files_into_zip_raises_graderioerror_then_file_not_found(create_structure,
                                                                        function):
     # todo вынести создание zip структуры в одтельную фикстуру
@@ -129,11 +123,6 @@ def test_extract_all_from_zip(create_structure, function):
            'print(42)'
 
 
-def test_rename_solution_file(create_structure, function):
-    # todo, подумать насколько необходима вообще эта функция (rename_solution_file)
-    pass
-
-
 def test_configure_grader(create_structure, function):
     new_parameters = {'feedback': 'new_feedback',
                       'debug': False,
@@ -145,3 +134,14 @@ def test_configure_grader(create_structure, function):
     function(grader)
     for parameter, value in new_parameters.items():
         assert getattr(grader, parameter) == value
+
+
+def test_check_files_into_zip_raises_graderioerror_then_bad_zip(create_structure,
+                                                                function):
+    # todo
+    pass
+
+
+def test_rename_solution_file(create_structure, function):
+    # todo, подумать насколько необходима вообще эта функция (rename_solution_file)
+    pass

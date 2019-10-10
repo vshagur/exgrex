@@ -6,4 +6,8 @@ import exgrex.actions.base_actions as actions
 @actions.run_tests(failfast=False, traceback=False)
 @actions.format_test_result()
 def execute_grader(grader):
+    """
+    :param grader
+    :type grader: Grader
+    """
     return grader.feedback, grader.score
