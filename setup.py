@@ -6,16 +6,16 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='exgrex',
-      version='0.1.0',
+      version='0.1.1',
       description='The exgrex package provides the ability to create a test run ' \
                   'of various configurations. Used for external graders as an ' \
-                  'entry point to the dock container.',
+                  'entry point to the docker container.',
 
       long_description=long_description,
       long_description_content_type="text/markdown",
       author='vshagur',
       author_email='vshagur@gmail.com',
-      packages=find_packages(exclude=['tests', '*.test.*', '*.test']),
+      packages=find_packages(exclude=['tests', '*.test.*', '*.test','example_grader',]),
       scripts=['bin/executeGrader', ],
       keywords=['mooc', 'grader', 'python', 'python3'],
       url='https://github.com/vshagur/exgrex',
