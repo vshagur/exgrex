@@ -2,11 +2,11 @@
 from distutils.core import setup
 from setuptools import find_packages
 
-with open("README.md", "r") as fh:
+with open("README", "r") as fh:
     long_description = fh.read()
 
 setup(name='exgrex',
-      version='0.1.1',
+      version='0.1.5',
       description='The exgrex package provides the ability to create a test run ' \
                   'of various configurations. Used for external graders as an ' \
                   'entry point to the docker container.',

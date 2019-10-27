@@ -34,7 +34,7 @@ def load_executor_module(module_name, module_path):
 def main(config=DefaultConfig):
     try:
         cli_parameters = parse(config.cli_parameter_part_id)
-        debug = os.environ.get(config.env_parameter_debug, True)
+        debug = os.environ.get(config.env_parameter_debug, '1')
         grader = Grader.create_grader(cli_parameters, debug, config)
         module_path = os.path.join(
             grader.cwd, grader.grader_path, config.executor_filename)
