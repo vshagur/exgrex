@@ -6,9 +6,9 @@
 
 The exgrex package provides the ability to create a test run of various configurations. Used for external graders as an entry point to the dock container.
 
-## Getting Started
+## Documentation
 
-These instructions will get you a copy of the project up and running on your local machine for development.
+You can find out the description of the project, the reasons for its occurrence and the user manual from the [wiki](https://github.com/vshagur/exgrex/wiki)
 
 ### Installing
 
