@@ -33,12 +33,12 @@ class Grader:
 
     @classmethod
     def create_grader(cls, cli_parameters, debug, config):
-        if debug == '0':
-            cwd = Path(config.cwd)
-            submission_path = Path(config.submission_path)
-        else:
+        if debug:
             cwd = Path.cwd()
             submission_path = Path(cwd, config.submission_path_debug)
+        else:
+            cwd = Path(config.cwd)
+            submission_path = Path(config.submission_path)
 
         grader_path = Path(cwd, cli_parameters[config.cli_parameter_part_id])
 
