@@ -6,7 +6,7 @@ with open("README", "r") as fh:
     long_description = fh.read()
 
 setup(name='exgrex',
-      version='0.1.6',
+      version='0.1.7',
       description='The exgrex package provides the ability to create a test run ' \
                   'of various configurations. Used for external graders as an ' \
                   'entry point to the docker container.',
