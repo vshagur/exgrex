@@ -19,7 +19,7 @@ def parse(required_setting_name):
 
 def send_report(feedback, score):
     """sends a report with the result of the grader’s checks"""
-    sys.stdout.write(json.dumps({'feedback': feedback, 'score': score}))
+    sys.stdout.write(json.dumps({'fractionalScore': score, 'feedback': feedback}))
     sys.exit(0)
 
 
