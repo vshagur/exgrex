@@ -1,6 +1,7 @@
 ![](https://img.shields.io/static/v1?label=Python&message=3.6&color=blue)
 ![](https://img.shields.io/static/v1?label=OS&message=linux&color=blue)
 ![](https://img.shields.io/static/v1?label=Dependencies&message=Pytest5.1.3&color=green)
+![](https://img.shields.io/github/license/vshagur/exgrex)
 
 # Exgrex
 
